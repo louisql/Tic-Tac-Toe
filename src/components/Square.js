@@ -3,7 +3,7 @@ import React from "react";
 const Square = props => {
 
     return(
-        <button className="square" onClick={clickHandler}>{props.value}</button>
+        <button className="square" onClick={props.onSquareClick}>{props.value}</button>
     )
 }
 
