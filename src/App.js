@@ -7,7 +7,7 @@ const Board = () => {
   const [squares, setSquares] = useState(Array(9).fill(null));
 
   const clickHandler = (i) => {
-    if (squares[i]) {
+    if (squares[i] || calculateWinner(squares)) {
       return;
     }
 
@@ -23,8 +23,17 @@ const Board = () => {
     setXIsNext(!xIsNext);
   }
 
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player " + (xIsNext ? "X" : "O")
+  }
+
   return (
     <React.Fragment>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() =>clickHandler(0)} /> {/* using arrow function to fix the infinite loop created by calling the function with (0) instead of just pointing to it */}
         <Square value={squares[1]} onSquareClick={() =>clickHandler(1)} />
@@ -43,5 +52,25 @@ const Board = () => {
     </React.Fragment>
   );
 };
+
+const calculateWinner = (squares) => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
 
 export default Board
